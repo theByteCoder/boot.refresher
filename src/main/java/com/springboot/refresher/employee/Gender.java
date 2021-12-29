@@ -1,4 +1,4 @@
-package com.springboot.refresher.employees.entity;
+package com.springboot.refresher.employee;
 
 public enum Gender {
     MALE(0), FEMALE(1), OTHER(2);
