@@ -20,7 +20,7 @@ public class Employee {
     @Column(name = "last_name", length = 225)
     private String lastName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "gender", nullable = false)
     private Gender gender;
 
@@ -30,7 +30,7 @@ public class Employee {
     @Column(name = "hire_date", nullable = false)
     private String hireDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 

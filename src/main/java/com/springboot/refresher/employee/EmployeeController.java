@@ -1,5 +1,7 @@
 package com.springboot.refresher.employee;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +20,11 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
+    private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
+
     @GetMapping(value = "/")
     public ResponseEntity<List<Employee>> getEmployees() {
-        List<Employee> eList = employeeService.getEmployees();
-        return ResponseEntity.ok().body(eList);
+        return ResponseEntity.ok().body(employeeService.getEmployees());
     }
 
     @GetMapping(value = "/{id}")
