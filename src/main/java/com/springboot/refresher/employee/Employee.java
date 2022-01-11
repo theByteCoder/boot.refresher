@@ -4,13 +4,16 @@ import com.springboot.refresher.department.Department;
 import com.springboot.refresher.gender.Gender;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "employee")
-public class Employee {
+public class Employee implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column(name = "emp_no")
     private Long empNo;
 
@@ -24,30 +27,39 @@ public class Employee {
     @JoinColumn(name = "gender", nullable = false)
     private Gender gender;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
+
     @Column(name = "birth_date", nullable = false)
     private String birthDate;
 
     @Column(name = "hire_date", nullable = false)
     private String hireDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "department_id", nullable = false)
-    private Department department;
-
     public Employee() {
     }
 
-    public Employee(String firstName, String lastName, Gender gender, String birthDate, String hireDate, Department department) {
+    public Employee(Long empNo, String firstName, String lastName, Gender gender, Department department, String birthDate, String hireDate) {
+        this.empNo = empNo;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
+        this.department = department;
         this.birthDate = birthDate;
         this.hireDate = hireDate;
-        this.department = department;
     }
 
     public Long getId() {
+        return id;
+    }
+
+    public Long getEmpNo() {
         return empNo;
+    }
+
+    public void setEmpNo(Long empNo) {
+        this.empNo = empNo;
     }
 
     public String getFirstName() {
@@ -74,6 +86,14 @@ public class Employee {
         this.gender = gender;
     }
 
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
     public String getBirthDate() {
         return birthDate;
     }
@@ -90,24 +110,17 @@ public class Employee {
         this.hireDate = hireDate;
     }
 
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
-
     @Override
     public String toString() {
         return "Employee{" +
-                "emp_no=" + empNo +
+                "id=" + id +
+                ", empNo=" + empNo +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", gender=" + gender +
-                ", birthDate=" + birthDate +
-                ", hireDate=" + hireDate +
                 ", department=" + department +
+                ", birthDate='" + birthDate + '\'' +
+                ", hireDate='" + hireDate + '\'' +
                 '}';
     }
 }

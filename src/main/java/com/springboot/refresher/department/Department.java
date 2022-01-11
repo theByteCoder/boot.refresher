@@ -13,6 +13,8 @@ public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column(name = "dept_no")
     private Long deptNo;
 

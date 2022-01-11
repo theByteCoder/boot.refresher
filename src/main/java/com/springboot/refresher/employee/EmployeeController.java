@@ -1,5 +1,6 @@
 package com.springboot.refresher.employee;
 
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/")
-    public HttpStatus addEmployee(@RequestBody Employee employee) {
-
+    public HttpStatus addEmployee(@RequestBody @NonNull Employee employee) {
         return employeeService.createEmployee(employee);
     }
 }
