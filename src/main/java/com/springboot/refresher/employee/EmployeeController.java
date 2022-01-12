@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping(value = "/employees")
 public class EmployeeController {
@@ -23,9 +25,10 @@ public class EmployeeController {
     private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
 
     @GetMapping
-    public ResponseEntity<Page<Employee>> getEmployees(
-            @RequestParam @NotNull int page,
-            @RequestParam @NotNull int size) {
+    public ResponseEntity<Page<Employee>> getEmployees(HttpServletRequest request,
+                                                       @RequestParam @NotNull int page,
+                                                       @RequestParam @NotNull int size) {
+        logger.info("Host - " + request.getRequestURL().toString().replace("/employees", ""));
         return ResponseEntity.ok().body(employeeService.getEmployees(page, size));
     }
 
