@@ -9,6 +9,7 @@ import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -36,7 +37,10 @@ public class EmployeeController {
     @GetMapping(value = "/{id}")
     public ResponseEntity
             <Employee> getEmployee(@PathVariable long id) {
-        return ResponseEntity.ok().body(employeeService.getEmployeeById(id));
+        Optional<Employee> employee = employeeService.getEmployeeById(id);
+        if (employee.isPresent())
+            return ResponseEntity.ok().cacheControl(cacheControl).body(employee.get());
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/")

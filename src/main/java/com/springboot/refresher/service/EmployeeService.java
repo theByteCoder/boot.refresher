@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -36,12 +37,14 @@ public class EmployeeService {
     }
 
     @Cacheable(value = "emp")
-    public Employee getEmployeeById(Long id) {
-        Optional<Employee> e = employeeRepository.findById(id);
-        return e.get();
+    public Optional<Employee> getEmployeeById(Long id) {
+        return employeeRepository.findById(id);
     }
 
     public ResponseEntity<Employee> createEmployee(Employee employee) {
+        Optional<Employee> employeeOptional = employeeRepository.findByEmpNo(employee.getEmpNo());
+        if (employeeOptional.isPresent())
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(employeeOptional.get());
         employeeRepository.save(employee);
         return ResponseEntity.ok().build();
     }

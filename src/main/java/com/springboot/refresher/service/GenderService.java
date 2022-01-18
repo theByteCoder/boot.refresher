@@ -3,10 +3,13 @@ package com.springboot.refresher.service;
 import com.springboot.refresher.entity.Gender;
 import com.springboot.refresher.repository.GenderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,16 +22,21 @@ public class GenderService {
         this.genderRepository = genderRepository;
     }
 
-    public List<Gender> getGenders() {
-        return genderRepository.findAll();
+    public Page<Gender> getGenders(int page, int size) {
+        Pageable pageable = PageRequest
+                .of(page, size, Sort.by("id").ascending());
+        return genderRepository.findAll(pageable);
     }
 
-    public Gender getGenderByCode(Long code) {
-        Optional<Gender> g = genderRepository.findById(code);
-        return g.get();
+    public Optional<Gender> getGenderByCode(Long code) {
+        return genderRepository.findById(code);
     }
 
     public HttpStatus createGender(Gender gender) {
+        Optional<Gender> genderOptional = genderRepository
+                .findById(gender.getGenderCode());
+        if (genderOptional.isPresent())
+            return HttpStatus.CONFLICT;
         genderRepository.save(gender);
         return HttpStatus.CREATED;
     }

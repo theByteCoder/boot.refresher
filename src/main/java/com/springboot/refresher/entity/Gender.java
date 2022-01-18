@@ -21,5 +21,5 @@ public class Gender {
     private Long genderCode;
 
     @Column(name = "gender")
-    private String gender;
+    private String genderLabel;
 }
