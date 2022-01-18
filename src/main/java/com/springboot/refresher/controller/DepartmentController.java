@@ -1,5 +1,7 @@
-package com.springboot.refresher.department;
+package com.springboot.refresher.controller;
 
+import com.springboot.refresher.entity.Department;
+import com.springboot.refresher.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

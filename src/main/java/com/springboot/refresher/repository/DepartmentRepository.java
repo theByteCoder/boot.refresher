@@ -1,6 +1,6 @@
-package com.springboot.refresher.department;
+package com.springboot.refresher.repository;
 
-import com.springboot.refresher.department.Department;
+import com.springboot.refresher.entity.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

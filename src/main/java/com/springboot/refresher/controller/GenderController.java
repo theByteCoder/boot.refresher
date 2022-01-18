@@ -1,6 +1,7 @@
-package com.springboot.refresher.gender;
+package com.springboot.refresher.controller;
 
-import org.apache.coyote.Response;
+import com.springboot.refresher.entity.Gender;
+import com.springboot.refresher.service.GenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

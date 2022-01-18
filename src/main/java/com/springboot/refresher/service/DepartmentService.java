@@ -1,7 +1,7 @@
-package com.springboot.refresher.department;
+package com.springboot.refresher.service;
 
-import com.springboot.refresher.department.Department;
-import com.springboot.refresher.department.DepartmentRepository;
+import com.springboot.refresher.entity.Department;
+import com.springboot.refresher.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

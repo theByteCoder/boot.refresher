@@ -1,5 +1,7 @@
-package com.springboot.refresher.gender;
+package com.springboot.refresher.service;
 
+import com.springboot.refresher.entity.Gender;
+import com.springboot.refresher.repository.GenderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

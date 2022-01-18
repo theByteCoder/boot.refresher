@@ -1,4 +1,4 @@
-package com.springboot.refresher.department;
+package com.springboot.refresher.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

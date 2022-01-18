@@ -1,5 +1,7 @@
-package com.springboot.refresher.employee;
+package com.springboot.refresher.service;
 
+import com.springboot.refresher.entity.Employee;
+import com.springboot.refresher.repository.EmployeeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

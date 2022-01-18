@@ -1,4 +1,4 @@
-package com.springboot.refresher.gender;
+package com.springboot.refresher.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

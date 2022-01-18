@@ -1,15 +1,15 @@
-package com.springboot.refresher.employee;
+package com.springboot.refresher.controller;
 
-import com.sun.istack.NotNull;
+import com.springboot.refresher.entity.Employee;
+import com.springboot.refresher.service.EmployeeService;
 import lombok.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping(value = "/employees")
@@ -22,14 +22,15 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
+    private final CacheControl cacheControl = CacheControl
+            .maxAge(60, TimeUnit.MINUTES)
+            .noTransform()
+            .mustRevalidate();
 
     @GetMapping
-    public ResponseEntity<Page<Employee>> getEmployees(HttpServletRequest request,
-                                                       @RequestParam @NotNull int page,
-                                                       @RequestParam @NotNull int size) {
-        logger.info("Host - " + request.getRequestURL().toString().replace("/employees", ""));
-        return ResponseEntity.ok().body(employeeService.getEmployees(page, size));
+    public ResponseEntity<Page<Employee>> getEmployees(@RequestParam @NonNull int page,
+                                                       @RequestParam @NonNull int size) {
+        return ResponseEntity.ok().cacheControl(cacheControl).body(employeeService.getEmployees(page, size));
     }
 
     @GetMapping(value = "/{id}")

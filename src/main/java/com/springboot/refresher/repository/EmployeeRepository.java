@@ -1,5 +1,7 @@
-package com.springboot.refresher.employee;
+package com.springboot.refresher.repository;
 
+import com.springboot.refresher.entity.Employee;
+import com.springboot.refresher.entity.Gender;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
