@@ -23,20 +23,17 @@ public class GenderService {
     }
 
     public Page<Gender> getGenders(int page, int size) {
-        Pageable pageable = PageRequest
-                .of(page, size, Sort.by("id").ascending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
         return genderRepository.findAll(pageable);
     }
 
-    public Optional<Gender> getGenderByCode(Long code) {
-        return genderRepository.findById(code);
+    public Optional<Gender> getGenderByGenderCode(Long genderCode) {
+        return genderRepository.findByGenderCode(genderCode);
     }
 
     public HttpStatus createGender(Gender gender) {
-        Optional<Gender> genderOptional = genderRepository
-                .findById(gender.getGenderCode());
-        if (genderOptional.isPresent())
-            return HttpStatus.CONFLICT;
+        Optional<Gender> genderOptional = genderRepository.findByGenderCode(gender.getGenderCode());
+        if (genderOptional.isPresent()) return HttpStatus.CONFLICT;
         genderRepository.save(gender);
         return HttpStatus.CREATED;
     }

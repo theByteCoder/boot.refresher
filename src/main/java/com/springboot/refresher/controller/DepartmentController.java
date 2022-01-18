@@ -1,5 +1,7 @@
 package com.springboot.refresher.controller;
 
+import com.springboot.refresher.converter.DepartmentConverter;
+import com.springboot.refresher.dto.DepartmentDTO;
 import com.springboot.refresher.entity.Department;
 import com.springboot.refresher.service.DepartmentService;
 import lombok.NonNull;
@@ -17,36 +19,34 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping(value = "/departments")
 public class DepartmentController {
 
-    private final CacheControl cacheControl = CacheControl
-            .maxAge(60, TimeUnit.MINUTES)
-            .noTransform()
-            .mustRevalidate();
+    private final CacheControl cacheControl = CacheControl.maxAge(60, TimeUnit.MINUTES).noTransform().mustRevalidate();
 
-    @Autowired
     private final DepartmentService departmentService;
+    private final DepartmentConverter departmentConverter;
 
-    public DepartmentController(DepartmentService departmentService) {
+    public DepartmentController(@Autowired DepartmentService departmentService, @Autowired DepartmentConverter departmentConverter) {
         this.departmentService = departmentService;
+        this.departmentConverter = departmentConverter;
     }
 
     @GetMapping
-    public ResponseEntity<Page<Department>> getDepartments(
-            @RequestParam @NonNull int page,
-            @RequestParam @NonNull int size
-    ) {
+    public ResponseEntity<Page<Department>> getDepartments(@RequestParam @NonNull int page, @RequestParam @NonNull int size) {
         return ResponseEntity.ok().body(departmentService.getDepartments(page, size));
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Department> getDepartment(@PathVariable Long id) {
-        Optional<Department> department = departmentService.getDepartmentById(id);
-        if (department.isPresent())
-            return ResponseEntity.ok().cacheControl(cacheControl).body(department.get());
+    @GetMapping(value = "/{deptNo}")
+    public ResponseEntity<DepartmentDTO> getDepartment(@PathVariable Long deptNo) {
+        Optional<Department> department = departmentService.getDepartmentByDeptNo(deptNo);
+        if (department.isPresent()) {
+            DepartmentDTO departmentDTO = departmentConverter.entityToDTO(department.get());
+            return ResponseEntity.ok().cacheControl(cacheControl).body(departmentDTO);
+        }
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping(value = "/")
-    public HttpStatus createDepartment(@RequestBody Department department) {
+    public HttpStatus createDepartment(@RequestBody DepartmentDTO departmentDTO) {
+        Department department = departmentConverter.dtoToEntity(departmentDTO);
         return departmentService.createDepartment(department);
     }
 }

@@ -2,26 +2,17 @@ package com.springboot.refresher.converter;
 
 import com.springboot.refresher.dto.EmployeeDTO;
 import com.springboot.refresher.entity.Employee;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 public class EmployeeConverter {
 
-    private final Employee employee;
-    private final EmployeeDTO employeeDTO;
-
-    public EmployeeConverter(@Autowired Employee employee, @Autowired EmployeeDTO employeeDTO) {
-        this.employee = employee;
-        this.employeeDTO = employeeDTO;
-    }
-
     public Employee dtoToEntity(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
         employee.setEmpNo(employeeDTO.getEmpNo());
         employee.setFirstName(employeeDTO.getFirstName());
         employee.setLastName(employeeDTO.getLastName());
@@ -32,11 +23,8 @@ public class EmployeeConverter {
         return employee;
     }
 
-    public List<Employee> dtoToEntity(List<EmployeeDTO> employeeDTOList) {
-        return employeeDTOList.stream().map(this::dtoToEntity).collect(Collectors.toList());
-    }
-
     public EmployeeDTO entityToDTO(Employee employee) {
+        EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setEmpNo(employee.getEmpNo());
         employeeDTO.setFirstName(employee.getFirstName());
         employeeDTO.setLastName(employee.getLastName());
@@ -47,7 +35,11 @@ public class EmployeeConverter {
         return employeeDTO;
     }
 
-    public Page<EmployeeDTO> entityToDTO(Page<Employee> employeeList) {
-        return new PageImpl<>(employeeList.stream().map(this::entityToDTO).collect(Collectors.toList()));
+    public Page<Employee> dtoToEntity(Page<EmployeeDTO> employeeDTOPage) {
+        return new PageImpl<>(employeeDTOPage.stream().map(this::dtoToEntity).collect(Collectors.toList()));
+    }
+
+    public Page<EmployeeDTO> entityToDTO(Page<Employee> employeePage) {
+        return new PageImpl<>(employeePage.stream().map(this::entityToDTO).collect(Collectors.toList()));
     }
 }

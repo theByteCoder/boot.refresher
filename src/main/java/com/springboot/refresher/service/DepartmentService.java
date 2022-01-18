@@ -27,14 +27,13 @@ public class DepartmentService {
         return departmentRepository.findAll(pageable);
     }
 
-    public Optional<Department> getDepartmentById(Long id) {
-        return departmentRepository.findById(id);
+    public Optional<Department> getDepartmentByDeptNo(Long id) {
+        return departmentRepository.findByDeptNo(id);
     }
 
     public HttpStatus createDepartment(Department department) {
-        Optional<Department> departmentOptional = departmentRepository.findById(department.getDeptNo());
-        if (departmentOptional.isPresent())
-            return HttpStatus.CONFLICT;
+        Optional<Department> departmentOptional = departmentRepository.findByDeptNo(department.getDeptNo());
+        if (departmentOptional.isPresent()) return HttpStatus.CONFLICT;
         departmentRepository.save(department);
         return HttpStatus.CREATED;
     }

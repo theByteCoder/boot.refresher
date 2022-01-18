@@ -1,5 +1,7 @@
 package com.springboot.refresher.controller;
 
+import com.springboot.refresher.converter.GenderConverter;
+import com.springboot.refresher.dto.GenderDTO;
 import com.springboot.refresher.entity.Gender;
 import com.springboot.refresher.service.GenderService;
 import lombok.NonNull;
@@ -17,36 +19,35 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping(value = "/genders")
 public class GenderController {
 
-    private final CacheControl cacheControl = CacheControl
-            .maxAge(60, TimeUnit.MINUTES)
-            .noTransform()
-            .mustRevalidate();
+    private final CacheControl cacheControl = CacheControl.maxAge(60, TimeUnit.MINUTES).noTransform().mustRevalidate();
 
-    @Autowired
     private final GenderService genderService;
+    private final GenderConverter genderConverter;
 
-    public GenderController(GenderService genderService) {
+    public GenderController(@Autowired GenderService genderService, @Autowired GenderConverter genderConverter) {
         this.genderService = genderService;
+        this.genderConverter = genderConverter;
     }
 
     @GetMapping
-    public ResponseEntity<Page<Gender>> getAllGenders(
-            @RequestParam @NonNull int page,
-            @RequestParam @NonNull int size
-    ) {
-        return ResponseEntity.ok().body(genderService.getGenders(page, size));
+    public ResponseEntity<Page<GenderDTO>> getAllGenders(@RequestParam @NonNull int page, @RequestParam @NonNull int size) {
+        Page<GenderDTO> genderDTOPage = genderConverter.entityToDTO(genderService.getGenders(page, size));
+        return ResponseEntity.ok().body(genderDTOPage);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Gender> getGender(@PathVariable long id) {
-        Optional<Gender> gender = genderService.getGenderByCode(id);
-        if (gender.isPresent())
-            return ResponseEntity.ok().cacheControl(cacheControl).body(gender.get());
+    @GetMapping(value = "/{genderCode}")
+    public ResponseEntity<GenderDTO> getGender(@PathVariable long genderCode) {
+        Optional<Gender> gender = genderService.getGenderByGenderCode(genderCode);
+        if (gender.isPresent()) {
+            GenderDTO genderDTO = genderConverter.entityToDTO(gender.get());
+            return ResponseEntity.ok().cacheControl(cacheControl).body(genderDTO);
+        }
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping(value = "/")
-    public HttpStatus createGender(@RequestBody Gender gender) {
+    public HttpStatus createGender(@RequestBody GenderDTO genderDTO) {
+        Gender gender = genderConverter.dtoToEntity(genderDTO);
         return genderService.createGender(gender);
     }
 }
